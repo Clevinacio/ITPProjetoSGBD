@@ -15,15 +15,15 @@ int main(int argc, char const *argv[]) {
        *nomeColuna = malloc(sizeof(char) * 100);
   int quantColunas;
   // abrindo metadados: escreve no arquivo, lê o arquivo.
-  FILE *arquivo = fopen(nomeArquivo, "a+");
-  if (arquivo != NULL) { // Se arquivo NÂO estiver vazio: IF iniciado.
+  FILE *metadados = fopen(nomeArquivo, "a+"), *arquivoTabela;
+  if (metadados != NULL) { // Se arquivo NÂO estiver vazio: IF iniciado.
 
     printf("Digite o nome da tabela: ");
     scanf("%s", nomeTabela); // recebe do USUÁRIO o nome da tabela.
 
     char *buffer = malloc(sizeof(char) * 100);
     // lê o arquivo até a quebra de linha  e entra no IF para checá-lo.
-    while (fscanf(arquivo, "%s", buffer) != EOF) {
+    while (fscanf(metadados, "%s", buffer) != EOF) {
 
       /* SE nome da tabela inserido pelo USUÁRIO for igual a nome de alguma
       tabela existente no arquivo, ele recusa e pede um nome diferente para a
@@ -38,27 +38,29 @@ int main(int argc, char const *argv[]) {
        while e digita o nome da chave primária. */
     printf("Digite o nome da chave primária: ");
     scanf("%s", primaryKey); // recebe o nome da chave primária
-    fprintf(arquivo, "%s\n Colunas:\n %s ", nomeTabela, primaryKey);
-    /*[isso aqui ta imprimindo os valores da tabela]*/
+    fprintf(metadados, "%s\n", nomeTabela); // escrevendo no arquivo metadados o nome da tabela
+    arquivoTabela = fopen(nomeTabela, "a+"); // cria um arquivo com o nome da tabela
+    fprintf(arquivoTabela, "%s*|", primaryKey);
+    /*[isso aqui ta escrevendo os valores da tabela no novo arquivo*/
 
     printf("Digite a quantidade de colunas: ");
-    scanf("%d", &quantColunas); // Solicitação de quantidade de colunas
+    scanf("%d", &quantColunas); // solicitação de quantidade de colunas
     for (int i = 0; i < quantColunas; i++) {
-      printf("Digite o nome da coluna: ");
+      printf("Digite o nome da coluna %d: ",i+1);
       scanf("%s", nomeColuna);
-      while (fscanf(arquivo, "%s", buffer) != EOF) {
+      while (fscanf(metadados, "%s", buffer) != EOF) {
         if (strcmp(nomeColuna, buffer) == 0) {
           printf("Coluna já existe! Dê outro nome: ");
           scanf("%s", nomeColuna); // recebe o novo nome.
         }
       }
-      fprintf(arquivo, "%s ", nomeColuna);
+      fprintf(arquivoTabela, "%s|", nomeColuna);
     }
-    fprintf(arquivo, "\n\n");
+    fprintf(metadados, "\n\n");
 
     printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
 
-    fclose(arquivo);
+    fclose(metadados);
     free(nomeTabela);
     free(primaryKey);
     free(buffer);
