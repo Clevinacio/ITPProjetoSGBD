@@ -4,7 +4,7 @@
 /*################################################################
   #                      PROJETO ITP 2018.2                      #
   #            Componentes: Cleverton Inácio Bezerra             #
-  #                         Nataly Enne                          #
+  #                         Nataly Enne da Costa Gonçalo         #
   ################################################################
 */
 int main(int argc, char const *argv[]) {
