@@ -1,7 +1,0 @@
-Cleverton
- Colunas:
- id nome idade 
-
-Nat
-
-

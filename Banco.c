@@ -10,10 +10,10 @@
 int main(int argc, char const *argv[]) {
   // metadados é um arquivo que vai salvar o nome da tabela, as colunas e as
   // linhas.
-  char *nomeArquivo = "Metadados.txt", *nomeTabela = malloc(sizeof(char) * 200),
-       *primaryKey = malloc(sizeof(char) * 100),
-       *nomeColuna = malloc(sizeof(char) * 100);
-  int quantColunas;
+  char *nomeArquivo = "Metadados.itp", *nomeTabela = malloc(sizeof(char) * 200),
+       *primaryKey = malloc(sizeof(char) * 100), ext[] = ".itp";
+  int quantColunas,
+      comparador; // comparador usado para gerenciar comparação das colunas
   // abrindo metadados: escreve no arquivo, lê o arquivo.
   FILE *metadados = fopen(nomeArquivo, "a+"), *arquivoTabela;
   if (metadados != NULL) { // Se arquivo NÂO estiver vazio: IF iniciado.
@@ -35,28 +35,42 @@ int main(int argc, char const *argv[]) {
     }
     /* caso entre no IF e o nome de tabela INSERIDO pelo USUÁRIO seja
        diferente de algu nome de tabela do arquivo ele sai do
-       while e digita o nome da chave primária. */
-    printf("Digite o nome da chave primária: ");
-    scanf("%s", primaryKey); // recebe o nome da chave primária
-    fprintf(metadados, "%s\n", nomeTabela); // escrevendo no arquivo metadados o nome da tabela
-    arquivoTabela = fopen(nomeTabela, "a+"); // cria um arquivo com o nome da tabela
-    fprintf(arquivoTabela, "%s*|", primaryKey);
-    /*[isso aqui ta escrevendo os valores da tabela no novo arquivo*/
+       while e cria o arquivo da tabela */
+    fprintf(metadados, "%s\n",
+            nomeTabela);     // escrevendo no arquivo metadados o nome da tabela
+    strcat(nomeTabela, ext); // adicionando a extensão ao arquivo da tabela
+    arquivoTabela = fopen(nomeTabela,
+                          "a+"); // cria um arquivo com o nome da tabela
+    /*isso aqui ta escrevendo os valores da tabela no novo arquivo*/
 
-    printf("Digite a quantidade de colunas: ");
+    printf("Digite a quantidade de colunas(incluindo chave primária): ");
     scanf("%d", &quantColunas); // solicitação de quantidade de colunas
+    char *colunas[quantColunas];
     for (int i = 0; i < quantColunas; i++) {
-      printf("Digite o nome da coluna %d: ",i+1);
-      scanf("%s", nomeColuna);
-      while (fscanf(metadados, "%s", buffer) != EOF) {
-        if (strcmp(nomeColuna, buffer) == 0) {
-          printf("Coluna já existe! Dê outro nome: ");
-          scanf("%s", nomeColuna); // recebe o novo nome.
+      comparador = 0;
+      colunas[i] =
+          malloc(sizeof(char) * 100); // aloca memória para o vetor que irá
+                                      // armazenar o nome das colunas
+      if (i == 0) {
+        printf("Digite o nome da chave primária: ");
+        scanf("%s", colunas[i]); // recebe o nome da chave primária
+        fprintf(arquivoTabela, "%s*|", colunas[i]);
+      } else {
+        printf("Digite o nome da coluna %d: ", i + 1);
+        scanf("%s", colunas[i]); // recebe o nome da coluna
+        while (comparador < i) {
+          if (colunas[i] == colunas[comparador]) {
+            printf("Coluna existente! Digite um novo nome: ");
+            scanf("%s", colunas[i]); // recebe o nome da coluna
+          } else {
+            comparador++;
+          }
         }
+        fprintf(arquivoTabela, "%s|", colunas[i]);
       }
-      fprintf(arquivoTabela, "%s|", nomeColuna);
     }
-    fprintf(metadados, "\n\n");
+
+    fprintf(metadados, "\n");
 
     printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
 
@@ -64,7 +78,6 @@ int main(int argc, char const *argv[]) {
     free(nomeTabela);
     free(primaryKey);
     free(buffer);
-    free(nomeColuna);
   } else
     printf("Erro na leitura ou criação do arquivo\n");
 
