@@ -10,9 +10,11 @@
 */
 
 int main(int argc, char const *argv[]) {
-  // metadados é um arquivo que vai salvar o nome da tabela, as colunas e as
-  // linhas.
-  criarTabela();
-
+  printf("#######################################\n");
+  printf("#                                     #\n");
+  printf("# BEM VINDO AO GERENCIADOR DE BANCOS! #\n");
+  printf("#                                     #\n");
+  printf("#######################################\n\n");
+  printf("abaixo as opções do banco:\n", );
   return 0;
 }

@@ -11,7 +11,7 @@ void criarTabela() {
   char *nomeTabela = malloc(sizeof(char) * 200),
        *caminho = malloc(sizeof(char) * 30), ext[] = ".itp",
        *coluna = malloc(sizeof(char) * 100);
-  int quantColunas;
+  int quantColunas, tipo;
   strcat(caminho, "data/");
   // abrindo metadados: escreve no arquivo, lê o arquivo.
   FILE *metadados = fopen("data/Metadados.itp", "a+"), *arquivoTabela;
@@ -34,19 +34,29 @@ void criarTabela() {
     /* criando as colunas da tabela*/
     printf("Digite a quantidade de colunas(incluindo chave primária): ");
     scanf("%d", &quantColunas); // solicitação de quantidade de colunas
-    char *colunas[quantColunas];
+    char *colunas[quantColunas], *tipos[quantColunas];
     for (int i = 0; i < quantColunas; i++) {
       // define o comparador como zero para verificar todas as colunas
       colunas[i] =
           malloc(sizeof(char) * 100); // aloca memória para o vetor que irá
                                       // armazenar o nome das colunas
+      tipos[i] = malloc(sizeof(char) * 20);
       if (i == 0) {
         printf("Digite o nome da chave primária: ");
         scanf("%s", colunas[i]); // recebe o nome da chave primária
+        tipos[i] = "INT";
       } else {
         printf("Digite o nome da coluna %d: ", i + 1);
-        scanf("%s", coluna); // recebe o nome da coluna
-        verificarColuna(i, colunas, coluna);
+        scanf("%s", coluna);                 // recebe o nome da coluna
+        verificarColuna(i, colunas, coluna); // verifica se coluna já existe
+        printf("Digite o número referente ao tipo da coluna:\n"
+               "1-INT\n"
+               "2-CHAR\n"
+               "3-FLOAT\n"
+               "4-DOUBLE\n"
+               "5-STRING\n>");
+        scanf("%d", &tipo);
+        definirTipoColuna(tipo, i, tipos);
         strcpy(colunas[i],
                coluna); // passa valor digitador pra array de strings
       }
@@ -54,9 +64,9 @@ void criarTabela() {
 
     for (int i = 0; i < quantColunas; i++) { // inserir colunas no arquivo
       if (i == 0) {
-        fprintf(arquivoTabela, "%s*|", colunas[i]);
+        fprintf(arquivoTabela, "%s*(%s)|", colunas[i], tipos[i]);
       } else
-        fprintf(arquivoTabela, "%s|", colunas[i]);
+        fprintf(arquivoTabela, "%s(%s)|", colunas[i], tipos[i]);
     }
 
     printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
@@ -112,4 +122,41 @@ void listarTabelas() {
     printf("%s", buffer);
   }
   free(buffer);
+}
+
+void definirTipoColuna(int tipo, int i, char **tipos) {
+  int j = 0;
+  while (j == 0) {
+    switch (tipo) {
+    case 1:
+      tipos[i] = "INT";
+      j = 1;
+      break;
+    case 2:
+      tipos[i] = "CHAR";
+      j = 1;
+      break;
+    case 3:
+      tipos[i] = "FLOAT";
+      j = 1;
+      break;
+    case 4:
+      tipos[i] = "DOUBLE";
+      j = 1;
+      break;
+    case 5:
+      tipos[i] = "STRING";
+      j = 1;
+      break;
+    default:
+      printf("Tipo inválido! Digite novamente:\n>");
+      scanf("%d", &tipo);
+      break;
+    }
+  }
+}
+
+void menuBanco() {
+  int op;
+  printf("\n", );
 }
