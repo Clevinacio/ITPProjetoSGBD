@@ -25,7 +25,7 @@ void criarTabela() {
     /* caso entre no IF e o nome de tabela INSERIDO pelo USUÁRIO seja
        diferente de algu nome de tabela do arquivo ele sai do
        while e cria o arquivo da tabela */
-    fprintf(metadados, "%s\n\n",
+    fprintf(metadados, "-%s\n\n",
             nomeTabela);     // escrevendo no arquivo metadados o nome da tabela
     strcat(nomeTabela, ext); // adicionando a extensão ao arquivo da tabela
     strcat(caminho, nomeTabela);
@@ -157,6 +157,42 @@ void definirTipoColuna(int tipo, int i, char **tipos) {
 }
 
 void menuBanco() {
-  int op;
-  printf("\n", );
+  int op = 1;
+  while (op != 0) {
+    printf(">");
+    scanf("%d", &op);
+    switch (op) {
+    case 1:
+      criarTabela();
+      break;
+    case 2:
+      listarTabelas();
+      break;
+    case 3:
+      printf("Em desenvolvimento...\n");
+      break;
+    case 4:
+      printf("Em desenvolvimento...\n");
+      break;
+    case 5:
+      printf("Em desenvolvimento...\n");
+      break;
+    case 6:
+      printf("Em desenvolvimento...\n");
+      break;
+    case 7:
+      printf("Em desenvolvimento...\n");
+      break;
+    case 0:
+      printf("Até a próxima!\n");
+      break;
+    default:
+      printf("Opção inválida! Selecione uma das opções:\n");
+      printf(
+          "1- Criar Tabela\n2- Listar Tabelas\n3- Adicionar valor a tabela\n4- "
+          "listar Dados da tabela\n5- Pesquisar valor de uma tabela\n6- Apagar "
+          "valor da tabela\n7- Apagar tabela\n0- Sair");
+      break;
+    }
+  }
 }
