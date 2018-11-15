@@ -25,7 +25,7 @@ void criarTabela() {
     /* caso entre no IF e o nome de tabela INSERIDO pelo USUÁRIO seja
        diferente de algu nome de tabela do arquivo ele sai do
        while e cria o arquivo da tabela */
-    fprintf(metadados, "-%s\n\n",
+    fprintf(metadados, "%s\n\n",
             nomeTabela);     // escrevendo no arquivo metadados o nome da tabela
     strcat(nomeTabela, ext); // adicionando a extensão ao arquivo da tabela
     strcat(caminho, nomeTabela);
@@ -191,7 +191,7 @@ void menuBanco() {
       printf(
           "1- Criar Tabela\n2- Listar Tabelas\n3- Adicionar valor a tabela\n4- "
           "listar Dados da tabela\n5- Pesquisar valor de uma tabela\n6- Apagar "
-          "valor da tabela\n7- Apagar tabela\n0- Sair");
+          "valor da tabela\n7- Apagar tabela\n0- Sair\n");
       break;
     }
   }

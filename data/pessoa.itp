@@ -1,1 +1,1 @@
-id*(INT)|nome(FLOAT)|idade(INT)|
+id*(INT)|nome(STRING)|idade(INT)|
