@@ -28,15 +28,15 @@ void criarTabela() {
        diferente de algu nome de tabela do arquivo ele sai do
        while e cria o arquivo da tabela */
     fprintf(metadados, "%s\n",
-            nomeTabela);     // escrevendo no arquivo metadados o nome da tabela
-    strcat(nomeTabela, ext); // adicionando a extensão ao arquivo da tabela
-    strcat(caminho, nomeTabela);
-    arquivoTabela =
-        fopen(caminho, "a+"); // cria um arquivo com o nome da tabela
+            nomeTabela); // escrevendo no arquivo metadados o nome da tabela
+    strcat(caminho, nomeTabela); // adicionando a extensão ao arquivo da tabela
+    strcat(caminho, ext);
+    arquivoTabela = fopen(caminho, "w"); // cria um arquivo com o nome da tabela
     /* criando as colunas da tabela*/
     printf("Digite a quantidade de colunas(incluindo chave primária): ");
     scanf("%d", &quantColunas); // solicitação de quantidade de colunas
-    char *colunas[quantColunas], *tipos[quantColunas];
+    char **colunas = malloc(sizeof(char *) * quantColunas),
+         **tipos = malloc(sizeof(char *) * quantColunas);
     for (int i = 0; i < quantColunas; i++) {
       // define o comparador como zero para verificar todas as colunas
       colunas[i] =
@@ -62,21 +62,24 @@ void criarTabela() {
         strcpy(colunas[i],
                coluna); // passa valor digitado pra array de strings
       }
-      free(tipos[i]);
-    }
-    for (int i = 0; i < quantColunas; i++) { // inserir colunas no arquivo
-      if (i == 0) {
-        fprintf(arquivoTabela, "%s* %s|", colunas[i], tipos[i]);
-      } else
-        fprintf(arquivoTabela, "%s %s|", colunas[i], tipos[i]);
     }
 
-    printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
+    for (int i = 0; i < quantColunas; i++) { // inserir colunas no arquivo
+      if (i == 0) {
+        printf("%s %s\n", colunas[i], tipos[i]);
+        fprintf(arquivoTabela, "%s* %s|", colunas[i], tipos[i]);
+      } else
+        printf("%s %s\n", colunas[i], tipos[i]);
+      fprintf(arquivoTabela, "%s %s|", colunas[i], tipos[i]);
+    }
+    // printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
 
     fclose(metadados);
     fclose(arquivoTabela);
     free(nomeTabela);
     free(coluna);
+    free(colunas);
+    free(tipos);
   } else
     printf("Erro na leitura ou criação do arquivo\n");
 }
