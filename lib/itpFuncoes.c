@@ -14,7 +14,7 @@ void criarTabela() {
        *caminho = malloc(sizeof(char) * 30), ext[] = ".itp",
        *coluna = malloc(sizeof(char) * 100);
   int quantColunas, tipo;
-  strcat(caminho, "data/");
+  strcpy(caminho, "data/");
   // abrindo metadados: escreve no arquivo, lê o arquivo.
   FILE *metadados = fopen("data/Metadados.itp", "a+"), *arquivoTabela;
   if (metadados != NULL) { // Se arquivo NÂO estiver vazio: IF iniciado.
