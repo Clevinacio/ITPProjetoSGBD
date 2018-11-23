@@ -7,6 +7,8 @@
   ################################################################
 */
 
+//____________________________________________________________________________
+// 1 - CRIAR TABELA
 void criarTabela() {
   char *nomeTabela = malloc(sizeof(char) * 200),
        *caminho = malloc(sizeof(char) * 30), ext[] = ".itp",
@@ -20,12 +22,12 @@ void criarTabela() {
     printf("Digite o nome da tabela: ");
     scanf("%s", nomeTabela); // recebe do USUÁRIO o nome da tabela.
 
-    verificarTabela(nomeTabela);
+    verificarTabelaExistente(nomeTabela);
 
     /* caso entre no IF e o nome de tabela INSERIDO pelo USUÁRIO seja
        diferente de algu nome de tabela do arquivo ele sai do
        while e cria o arquivo da tabela */
-    fprintf(metadados, "%s\n\n",
+    fprintf(metadados, "%s\n",
             nomeTabela);     // escrevendo no arquivo metadados o nome da tabela
     strcat(nomeTabela, ext); // adicionando a extensão ao arquivo da tabela
     strcat(caminho, nomeTabela);
@@ -58,15 +60,15 @@ void criarTabela() {
         scanf("%d", &tipo);
         definirTipoColuna(tipo, i, tipos);
         strcpy(colunas[i],
-               coluna); // passa valor digitador pra array de strings
+               coluna); // passa valor digitado pra array de strings
       }
+      free(tipos[i]);
     }
-
     for (int i = 0; i < quantColunas; i++) { // inserir colunas no arquivo
       if (i == 0) {
-        fprintf(arquivoTabela, "%s*(%s)|", colunas[i], tipos[i]);
+        fprintf(arquivoTabela, "%s* %s|", colunas[i], tipos[i]);
       } else
-        fprintf(arquivoTabela, "%s(%s)|", colunas[i], tipos[i]);
+        fprintf(arquivoTabela, "%s %s|", colunas[i], tipos[i]);
     }
 
     printf("Tabela %s criada com sucesso.\n\n", nomeTabela);
@@ -78,8 +80,102 @@ void criarTabela() {
   } else
     printf("Erro na leitura ou criação do arquivo\n");
 }
+//____________________________________________________________________________
+// 2 - LISTAR TABELAS
+void listarTabelas() {
+  FILE *arquivo = fopen("data/Metadados.itp", "r");
 
-void verificarTabela(char *nomeTabela) {
+  if (arquivo == NULL) {
+    printf("ERRO\n");
+  }
+  printf("Todas as tabelas do banco:\n");
+  char *buffer = malloc(sizeof(char) * 100);
+  while (fgets(buffer, 100, arquivo) != NULL) {
+    printf("%s", buffer);
+  }
+  free(buffer);
+}
+//____________________________________________________________________________
+// 3 - ADICIONAR VALOR NA TABELA
+void inserirLinhasColuna(char *nomeTabela) {
+  Tabela tabela;
+  char *caminho = malloc(sizeof(char) * 100),
+       *colunas = malloc(sizeof(char) * 200);
+  strcat(caminho, "data/");
+  strcat(caminho, nomeTabela);
+  strcat(caminho, ".itp");
+  FILE *arquivoTabela = fopen(caminho, "a+"),
+       *metadados = fopen("data/Metadados.itp", "r");
+  /*fscanf(arquivoTabela, "%[^\n]s", colunas);
+  int quantColunas = contadorColunas(caminho);
+  sepColuna = strtok(colunas, delColuna);
+  for (int i = 0; i < quantColunas; i++) {
+    strcpy(tabela.colunas[i], sepColuna);
+    strcat(tabela.colunas[i], " ");
+    printf("%s\n", tabela.colunas[i]);
+    sepColuna = strtok(NULL, delColuna);
+  }*/
+  free(caminho);
+  free(colunas);
+  fclose(arquivoTabela);
+  fclose(metadados);
+}
+//____________________________________________________________________________
+// 4- LISTAR DADOS DA TABELA
+
+//____________________________________________________________________________
+// 5- PESQUISAR VALOR NA TABELA
+
+//____________________________________________________________________________
+// 6- APAGAR VALOR DA TABELA
+
+//____________________________________________________________________________
+// 7- APAGAR TABELA
+void apagarTabela(char *nomeArquivo) {
+  char caminho[] = "data/";
+  strcat(caminho, nomeArquivo);
+  strcat(caminho, ".itp");
+  remove(caminho);
+  FILE *arquivoOriginal = fopen("data/Metadados.itp", "r");
+  FILE *arquivoSaida = fopen("data/metadados.temp", "w");
+
+  if (arquivoOriginal == NULL || arquivoSaida == NULL) {
+    printf("Erro de Leitura ou Abertura de Arquivo\n");
+  }
+  char *buffer = malloc(sizeof(char) * 101),
+       *arquivo = malloc(sizeof(char) * 200), *part;
+  while (fgets(buffer, 100, arquivoOriginal) != NULL) {
+    part = strtok(buffer, nomeArquivo);
+    fprintf(arquivoSaida, "%s", buffer);
+    printf("%s\n", buffer);
+  }
+  fclose(arquivoOriginal);
+  copiaArquivo("data/metadados.temp", "data/Metadados.itp");
+  fclose(arquivoSaida);
+  remove("data/metadados.temp");
+}
+void copiaArquivo(char *origem, char *destino) {
+  FILE *arquivoOriginal = fopen(origem, "r");
+  FILE *arquivoSaida = fopen(destino, "w");
+
+  if (arquivoOriginal == NULL || arquivoSaida == NULL) {
+    printf("Erro de Leitura ou Abertura de Arquivo\n");
+  }
+
+  char *buffer = malloc(sizeof(char) * 101);
+  while (fgets(buffer, 100, arquivoOriginal) != NULL) {
+    printf("%s\n", buffer);
+    fprintf(arquivoSaida, "%s", buffer);
+  }
+
+  fclose(arquivoOriginal);
+  fclose(arquivoSaida);
+  free(buffer);
+}
+
+//____________________________________________________________________________
+// 7- VERIFICAÇÕES
+void verificarTabelaExistente(char *nomeTabela) {
   FILE *metadados = fopen("data/Metadados.itp", "a+"), *arquivoTabela;
   char *buffer = malloc(sizeof(char) * 100);
   // lê o arquivo até a quebra de linha  e entra no IF para checá-lo.
@@ -90,6 +186,24 @@ void verificarTabela(char *nomeTabela) {
     para a tabela. */
     while (strcmp(nomeTabela, buffer) == 0) {
       printf("Tabela já existe! Dê outro nome: ");
+      scanf("%s", nomeTabela); // recebe o novo nome.
+    }
+  }
+  free(buffer);
+  fclose(metadados);
+}
+
+void verificarTabelaInexistente(char *nomeTabela) {
+  FILE *metadados = fopen("data/Metadados.itp", "r");
+  char *buffer = malloc(sizeof(char) * 100);
+  // lê o arquivo até a quebra de linha  e entra no IF para checá-lo.
+  while (fscanf(metadados, "%s", buffer) != EOF) {
+
+    /* ENQUANTO nome da tabela inserido pelo USUÁRIO for igual a nome de
+    alguma tabela existente no arquivo, ele recusa e pede um nome diferente
+    para a tabela. */
+    while (strcmp(nomeTabela, buffer) != 0) {
+      printf("Tabela não existe existe! digite uma tabela existente: ");
       scanf("%s", nomeTabela); // recebe o novo nome.
     }
   }
@@ -109,21 +223,8 @@ void verificarColuna(int i, char **colunas, char *coluna) {
     }
   }
 }
-
-void listarTabelas() {
-  FILE *arquivo = fopen("data/Metadados.itp", "r");
-
-  if (arquivo == NULL) {
-    printf("ERRO\n");
-  }
-  printf("Todas as tabelas do banco:\n");
-  char *buffer = malloc(sizeof(char) * 100);
-  while (fgets(buffer, 100, arquivo) != NULL) {
-    printf("%s", buffer);
-  }
-  free(buffer);
-}
-
+//____________________________________________________________________________
+// RELACIONADO A COLUNAS DO BANCO
 void definirTipoColuna(int tipo, int i, char **tipos) {
   int j = 0;
   while (j == 0) {
@@ -156,6 +257,37 @@ void definirTipoColuna(int tipo, int i, char **tipos) {
   }
 }
 
+int contadorColunas(char *nomeArquivo) {
+  int i = 0;
+  char *colunas = malloc(sizeof(char) * 200), *sep, del[] = "|";
+  FILE *arquivo = fopen(nomeArquivo, "r");
+  fscanf(arquivo, "%[^\n]s", colunas);
+  sep = strtok(colunas, del);
+  while (sep != NULL) {
+    i++;
+    sep = strtok(NULL, del);
+  }
+  fclose(arquivo);
+  free(colunas);
+  return i - 1;
+}
+
+void separarColunas(char *nomeArquivo, char *colunas, Tabela tabela) {
+  char *sepColuna, *sepTipo, delColuna[] = "|";
+  FILE *arquivo = fopen(nomeArquivo, "r");
+  fscanf(arquivo, "%[^\n]s", colunas);
+  int quantColunas = contadorColunas(nomeArquivo), i = 0;
+  sepColuna = strtok(colunas, delColuna);
+  while (sepColuna != NULL) {
+    strcpy(tabela.colunas[i], sepColuna);
+    strcat(tabela.colunas[i], " ");
+    printf("%s\n", tabela.colunas[i]);
+    sepColuna = strtok(NULL, delColuna);
+    i++;
+  }
+}
+//____________________________________________________________________________
+// MENU
 void menuBanco() {
   int op = 1;
   while (op != 0) {
@@ -168,8 +300,12 @@ void menuBanco() {
     case 2:
       listarTabelas();
       break;
-    case 3:
-      printf("Em desenvolvimento...\n");
+    case 3:;
+      char *nomeTabela = malloc(sizeof(char) * 100);
+      printf("Insira o nome da tabela: ");
+      scanf("%s", nomeTabela);
+      inserirLinhasColuna(nomeTabela);
+      free(nomeTabela);
       break;
     case 4:
       printf("Em desenvolvimento...\n");
@@ -181,7 +317,12 @@ void menuBanco() {
       printf("Em desenvolvimento...\n");
       break;
     case 7:
-      printf("Em desenvolvimento...\n");
+      nomeTabela = malloc(sizeof(char) * 100);
+      printf("Insira o nome da tabela: ");
+      scanf("%s", nomeTabela);
+      verificarTabelaInexistente(nomeTabela);
+      apagarTabela(nomeTabela);
+      free(nomeTabela);
       break;
     case 0:
       printf("Até a próxima!\n");
@@ -196,3 +337,4 @@ void menuBanco() {
     }
   }
 }
+//____________________________________________________________________________
