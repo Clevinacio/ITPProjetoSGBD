@@ -213,6 +213,7 @@ void verificarTabelaExistente(char *nomeTabela) {
     while (strcmp(nomeTabela, buffer) == 0) {
       printf("Tabela já existe! Dê outro nome: ");
       scanf("%s", nomeTabela); // recebe o novo nome.
+      fseek(metadados, 0, SEEK_SET);
     }
   }
   free(buffer);
@@ -230,6 +231,7 @@ void verificarTabelaInexistente(char *nomeTabela) {
     while (strcmp(nomeTabela, buffer) != 0) {
       printf("Tabela não existe existe! digite uma tabela existente: ");
       scanf("%s", nomeTabela); // recebe o novo nome.
+      fseek(metadados, 0, SEEK_SET);
     }
   }
   free(buffer);
