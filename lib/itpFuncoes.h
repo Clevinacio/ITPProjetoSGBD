@@ -5,6 +5,7 @@ void listarTabelas();
 void criarTabela();
 void definirTipoColuna(int tipo, int i, char **tipos);
 void menuBanco();
+void opcoesmenu();
 void inserirLinhasColuna(char *nometabela);
 void apagarTabela(char *nomeArquivo);
 // void separarColunas(char *nomeArquivo, char *colunas, Tabela tabela);
