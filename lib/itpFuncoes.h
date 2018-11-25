@@ -10,7 +10,7 @@ void inserirLinhasColuna(char *nometabela);
 void apagarTabela(char *nomeArquivo);
 // void separarColunas(char *nomeArquivo, char *colunas, Tabela tabela);
 int contadorColunas(char *arquivo);
-void copiaArquivo(char *origem, char *destino);
+void criarNovoMetadados();
 
 typedef struct {
   char colunas[50][100];
