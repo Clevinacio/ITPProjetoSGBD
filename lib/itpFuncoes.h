@@ -11,6 +11,7 @@ void apagarTabela(char *nomeArquivo);
 // void separarColunas(char *nomeArquivo, char *colunas, Tabela tabela);
 int contadorColunas(char *arquivo);
 void criarNovoMetadados();
+void listarDadosTabela(char *nomeTabela);
 
 typedef struct {
   char colunas[50][100];

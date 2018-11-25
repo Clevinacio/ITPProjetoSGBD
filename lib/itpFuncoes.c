@@ -114,7 +114,34 @@ void listarTabelas() {
 
 //____________________________________________________________________________
 // 4- LISTAR DADOS DA TABELA
+void listarDadosTabela(char *nomeTabela) {
+  char *caminho = malloc(sizeof(char) * 100),
+       *caminhoDadosTabela = malloc(sizeof(char) * 100);
+  strcpy(caminho, pasta);
+  strcat(caminho, nomeTabela);
+  strcat(caminho, ext);
+  strcpy(caminhoDadosTabela, pasta);
+  strcat(caminhoDadosTabela, nomeTabela);
+  strcat(caminhoDadosTabela, extDadosTabela);
+  FILE *arquivoDadosTabela = fopen(caminhoDadosTabela, "r"),
+       *arquivoTabela = fopen(caminho, "r");
 
+  if (arquivoDadosTabela == NULL || arquivoTabela == NULL) {
+    printf("Ainda não existem tabelas\n");
+  } else {
+    printf("Todas as tabelas do banco:\n");
+    char *buffer = malloc(sizeof(char) * 100);
+    while (fgets(buffer, 100, arquivoTabela) != NULL) {
+      printf("%s\n", buffer);
+    }
+    while (fgets(buffer, 100, arquivoDadosTabela) != NULL) {
+      printf("%s\n", buffer);
+    }
+    fclose(arquivoDadosTabela);
+    fclose(arquivoTabela);
+    free(buffer);
+  }
+}
 //____________________________________________________________________________
 // 5- PESQUISAR VALOR NA TABELA
 
@@ -280,9 +307,7 @@ void separarColunas(char *nomeArquivo, char *colunas, Tabela tabela) {
 //____________________________________________________________________________
 // MENU
 void menuBanco() {
-  int op;
-  printf(">");
-  scanf("%d", &op);
+  int op = 1;
   while (op != 0) {
     printf(">");
     scanf("%d", &op);
@@ -293,25 +318,34 @@ void menuBanco() {
       break;
     case 2:
       listarTabelas();
+      opcoesmenu();
       break;
     case 3:;
       printf("Em desenvolvimento...\n");
+      opcoesmenu();
       break;
-    case 4:
-      printf("Em desenvolvimento...\n");
+    case 4:;
+      char *nomeTabela = malloc(sizeof(char) * 100);
+      printf("Insira o nome da tabela: ");
+      scanf("%s", nomeTabela);
+      listarDadosTabela(nomeTabela);
+      opcoesmenu();
       break;
     case 5:
       printf("Em desenvolvimento...\n");
+      opcoesmenu();
       break;
     case 6:
       printf("Em desenvolvimento...\n");
+      opcoesmenu();
       break;
-    case 7:;
-      char *nomeTabela = malloc(sizeof(char) * 100);
+    case 7:
+      nomeTabela = malloc(sizeof(char) * 100);
       printf("Insira o nome da tabela: ");
       scanf("%s", nomeTabela);
       apagarTabela(nomeTabela);
       free(nomeTabela);
+      opcoesmenu();
       break;
     case 0:
       printf("Até a próxima!\n");
@@ -328,7 +362,7 @@ void menuBanco() {
 }
 
 void opcoesmenu() {
-  printf("abaixo as opções do banco:\n");
+  printf("\nabaixo as opções do banco:\n");
   printf("1- Criar Tabela\n2- Listar Tabelas\n3- Adicionar valor a tabela\n4- "
          "listar Dados da tabela\n5- Pesquisar valor de uma tabela\n6- Apagar "
          "valor da tabela\n7- Apagar tabela\n0- Sair\n");
