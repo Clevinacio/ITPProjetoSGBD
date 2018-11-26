@@ -106,6 +106,7 @@ void listarTabelas() {
     while (fgets(buffer, 100, arquivo) != NULL) {
       printf("%s", buffer);
     }
+    printf("\n");
     free(buffer);
   }
 }
@@ -228,7 +229,24 @@ void verificarTabelaExistente(char *nomeTabela) {
   free(buffer);
   fclose(metadados);
 }
+void verificarTabelaInexistente(char *nomeTabela) {
+  FILE *metadados = fopen(caminhoMetadados, "r");
+  char *buffer = malloc(sizeof(char) * 100);
+  // lê o arquivo até a quebra de linha  e entra no IF para checá-lo.
+  while (fscanf(metadados, "%s", buffer) != EOF) {
 
+    /* ENQUANTO nome da tabela inserido pelo USUÁRIO for igual a nome de
+    alguma tabela existente no arquivo, ele recusa e pede um nome diferente
+    para a tabela. */
+    while (strcmp(nomeTabela, buffer) != 0) {
+      printf("Tabela não existe! Digite outro nome: ");
+      scanf("%s", nomeTabela); // recebe o novo nome.
+      fseek(metadados, 0, SEEK_SET);
+    }
+  }
+  free(buffer);
+  fclose(metadados);
+}
 void verificarColuna(int i, char **colunas, char *coluna) {
   int comparador = 0; // comparador usado para gerenciar comparação das colunas
   while (comparador < i) {
@@ -343,6 +361,7 @@ void menuBanco() {
       nomeTabela = malloc(sizeof(char) * 100);
       printf("Insira o nome da tabela: ");
       scanf("%s", nomeTabela);
+      verificarTabelaInexistente(nomeTabela);
       apagarTabela(nomeTabela);
       free(nomeTabela);
       opcoesmenu();
