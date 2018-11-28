@@ -10,6 +10,7 @@
 */
 
 int main(int argc, char const *argv[]) {
+  system("clear");
   printf("#######################################\n");
   printf("#                                     #\n");
   printf("# BEM VINDO AO GERENCIADOR DE BANCOS! #\n");
@@ -19,6 +20,7 @@ int main(int argc, char const *argv[]) {
   printf("1- Criar Tabela\n2- Listar Tabelas\n3- Adicionar valor a tabela\n4- "
          "listar Dados da tabela\n5- Pesquisar valor de uma tabela\n6- Apagar "
          "valor da tabela\n7- Apagar tabela\n0- Sair\n");
+
   menuBanco();
 
   return 0;
