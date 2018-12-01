@@ -16,8 +16,6 @@ void verificarTabelaExistente(char *nomeTabela);
 void verificarTabelaInexistente(char *nomeTabela);
 void verificarColuna(int i, char **colunas, char *coluna);
 void definirTipoColuna(int tipo, int i, char **tipos);
-
-int contadorColunas(char *arquivo);
 void criarNovoMetadados();
 
 void adicionarDadoTabela(char *nomeTabela);

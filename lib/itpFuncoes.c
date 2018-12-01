@@ -117,7 +117,7 @@ void adicionarDadoTabela(char *nomeTabela) {
   char *caminho = malloc(sizeof(char) * 50),
        *caminhoDadosTabela = malloc(sizeof(char) * 50),
        *buffer = malloc(sizeof(char) * 100),
-       *valores = malloc(sizeof(char) * 100),
+       *valores = malloc(sizeof(char) * 500),
        *nomeColuna = malloc(sizeof(char) * 100);
   int cont = 0;
   strcpy(caminho, pasta);
@@ -135,11 +135,18 @@ void adicionarDadoTabela(char *nomeTabela) {
   fseek(arquivoColunas, 0, SEEK_SET);
   for (int i = 0; i < cont; i++) {
     fscanf(arquivoColunas, "%s", nomeColuna);
-    printf("Digite o valor a ser inserido para a coluna %s: ", nomeColuna);
-    scanf("%s", valores);
+    fflush(stdin);
+    printf("Digite o valor a ser inserido para a coluna %s:", nomeColuna);
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF)
+      ;
+    scanf("%[^\n]", valores);
     fprintf(arquivoDadosTabela, "%s|", valores);
     fscanf(arquivoColunas, "%s", nomeColuna);
   }
+  fprintf(arquivoDadosTabela, "\n");
+  system("clear");
+  printf("Valores Adicionados com Sucesso!\n");
   fclose(arquivoColunas);
   fclose(arquivoDadosTabela);
   free(caminho);
@@ -175,7 +182,6 @@ void listarDadosTabela(char *nomeTabela) {
     while (fgets(buffer, 100, arquivoDadosTabela) != NULL) {
       printf("%s\n", buffer);
     }
-    printf("\n");
     fclose(arquivoDadosTabela);
     fclose(arquivoTabela);
     free(buffer);
@@ -334,21 +340,6 @@ void definirTipoColuna(int tipo, int i, char **tipos) {
       break;
     }
   }
-}
-
-int contadorColunas(char *nomeArquivo) {
-  int i = 0;
-  char *colunas = malloc(sizeof(char) * 200), *sep, del[] = "|";
-  FILE *arquivo = fopen(nomeArquivo, "r");
-  fscanf(arquivo, "%[^\n]s", colunas);
-  sep = strtok(colunas, del);
-  while (sep != NULL) {
-    i++;
-    sep = strtok(NULL, del);
-  }
-  fclose(arquivo);
-  free(colunas);
-  return i - 1;
 }
 //____________________________________________________________________________
 // MENU
