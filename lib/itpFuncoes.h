@@ -19,8 +19,3 @@ void definirTipoColuna(int tipo, int i, char **tipos);
 void criarNovoMetadados();
 
 void adicionarDadoTabela(char *nomeTabela);
-
-typedef struct {
-  char *colunas;
-  char *tipo;
-} Coluna;

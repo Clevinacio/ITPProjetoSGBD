@@ -1,0 +1,3 @@
+id INT
+nome STRING
+idade INT
